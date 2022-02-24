@@ -1,36 +1,18 @@
 package com.scalable.demo.service;
 
-import com.scalable.demo.model.Event;
-import com.scalable.demo.web.DefaultWebSocketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import reactor.core.CoreSubscriber;
-import reactor.core.Disposable;
-import reactor.core.publisher.*;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.function.Consumer;
 
 @Service
-public class EventUnicastServiceImpl implements EventUnicastService {
+public class MessageResolverImpl implements MessageResolver {
 
-    Logger logger = LoggerFactory.getLogger(EventUnicastServiceImpl.class);
-    private EmitterProcessor<String> processor = EmitterProcessor.create();
-    private DirectProcessor<String> processor2 = DirectProcessor.create();
-
-
-//    private ConnectableFlux<String> connectableFlux = Flux.create(objectFluxSink -> {
-//        objectFluxSink = this.processor
-//        this.processor.subscribe(x->{
-//            return objectFluxSink.next(x);
-//        });
-//
-//    }).publish();
+    Logger logger = LoggerFactory.getLogger(MessageResolverImpl.class);
 
     private  Map<String,String> map = new HashMap();
 
@@ -42,24 +24,12 @@ public class EventUnicastServiceImpl implements EventUnicastService {
        map.put("ticket", "if you have raised ticket, please share ticket number with me?");
        map.put("not working", "can you please raise ticket via invgate? ");
        map.put("problem","Please contact with xyz@abc.com and do not forget ticket number");
-
-
    }
-    @Override
-    public void onNext(String next) {
-            logger.info("nex is called with {}",next.replaceAll("\"",""));
-            processor.onNext(map.get(next.replaceAll("\"","")));
-            processor2.onNext(map.get(next.replaceAll("\"","")));
-    }
 
-    @Override
-    public Flux<String> getMessages() {
-        return processor2;
-    }
 
+   @Override
     public String getMessage(String key){
        key =  key.replaceAll("\"","").toUpperCase();
-
 
        for(String x : map.keySet()){
            StringTokenizer str = new StringTokenizer(key, " \",");
@@ -71,6 +41,4 @@ public class EventUnicastServiceImpl implements EventUnicastService {
        }
        return null;
     }
-
-
 }
