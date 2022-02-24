@@ -28,7 +28,6 @@ public class WebSocketConfig {
         return new SimpleUrlHandlerMapping(map, -1);
     }
 
-
     @Bean
     public HandlerAdapter wsHandlerAdapter() {
         return new WebSocketHandlerAdapter();

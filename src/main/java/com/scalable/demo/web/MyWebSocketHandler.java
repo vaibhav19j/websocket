@@ -23,16 +23,14 @@ import java.io.IOException;
 @Component
 public class MyWebSocketHandler implements WebSocketHandler {
 
-    private MessageResolver messageResolver;
-
-
     Logger logger = LoggerFactory.getLogger(MyWebSocketHandler.class);
 
+    private MessageResolver messageResolver;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public MyWebSocketHandler(MessageResolverImpl eventUnicastService, ObjectMapper objectMapper) {
-        this.messageResolver = eventUnicastService;
+    public MyWebSocketHandler(MessageResolver messageResolver, ObjectMapper objectMapper) {
+        this.messageResolver = messageResolver;
         this.objectMapper = objectMapper;
     }
 
